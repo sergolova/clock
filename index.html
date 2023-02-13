@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script type="text/javascript" src="plot.js"></script>
+<script type="text/javascript" src="clock.js"></script>
+
+<style>
+    #cnv-div {
+        margin: 0 auto;
+        //border: 1px solid red;
+        width: min-content;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Clock</title>
+</head>
+
+<body onload="onLoad()" onclick="onClick()">
+<div id="cnv-div">
+    <canvas id="cnv" width="500" height="500" onresize="onCanvasResize()"></canvas>
+</div>
+</body>
+
+</html>
+
+<script>
+    var clock;
+
+    function onCanvasResize() {
+        let cnv = document.getElementById('cnv');
+        if (cnv) {
+            let w = cnv.getAttribute('width');
+            let h = cnv.getAttribute('height');
+            const indent = 0.0375 * w;
+            clock.radius = Math.min(w - indent * 2, h - indent * 2) / 2;
+            clock.center.x = indent + clock.radius;
+            clock.center.y = indent + clock.radius;
+
+            clock.setAutoSizes();
+        }
+    }
+
+    function onLoad() {
+        clock = new Clock(0, 0, 0);
+        clock.prepareCanvas('cnv');
+        onCanvasResize();
+        clock.start();
+    }
+
+    function onClick() {
+        if (clock && clock.audio) {
+            return
+        }
+        clock.audio = new Audio('tick.wav');
+        clock.audio.loop = true;
+        clock.audio.play();
+    }
+</script>
